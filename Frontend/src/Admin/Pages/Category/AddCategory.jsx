@@ -3,8 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import axios from 'axios';
 import { MainContext } from '../../../Context';
+import { useSelector } from 'react-redux';
+
 
 const AddCategory = () => {
+  const admin = useSelector((state) => state.admin);
   const { API_BASH_URL, CATEGORY_URL, notify } = useContext(MainContext)
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -32,7 +35,6 @@ const AddCategory = () => {
     const slug = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
     slugRef.current.value = slug;
   }
-
   function submitHandle(e) {
     e.preventDefault();
     const formData = new FormData()
@@ -40,8 +42,13 @@ const AddCategory = () => {
     formData.append("slug", slugRef.current.value);
     formData.append("Image", e.target.category_image.files[0]);
 
-
-    axios.post(API_BASH_URL + CATEGORY_URL + "/create", formData).then(
+    axios.post(API_BASH_URL + CATEGORY_URL + "/create", formData,
+      {
+        headers:{
+          Authorization:admin?.token
+        }
+      }
+    ).then(
       (resp) => {
         notify(resp.data.msg, resp.data.flag)
         if (resp.data.flag === 1) {

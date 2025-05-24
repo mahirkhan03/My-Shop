@@ -22,16 +22,16 @@ const Login = () => {
 
     axios.post(API_BASH_URL + ADMIN_URL + "/login", data).then(
       (resp) => {
-        // console.log(resp.data);
         notify(resp.data.msg, resp.data.flag)
         if (resp.data.flag === 1) {
           e.target.reset()
+          navigator('/admin')
           dispatcher(setAdmin(
             {
-              admin: resp.data.admin
+              admin: resp.data.admin,
+              token: resp.data.token
             }
           ))
-          navigator('/admin')
         }
       }
     ).catch(

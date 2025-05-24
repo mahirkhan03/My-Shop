@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -16,7 +17,7 @@ server.use(express.static("./public"))
 
 
 
-mongoose.connect("mongodb://localhost:27017/", { dbName: "WSJP" }).then(
+mongoose.connect(process.env.MONGODB, { dbName: "WSJP" }).then(
     () => {
         server.listen(5000, ()=>{
             console.log("Server is running on port 5000");

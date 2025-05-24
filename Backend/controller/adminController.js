@@ -1,3 +1,4 @@
+const { generateToken } = require('../helper');
 const adminModel = require('../model/adminModel')
 
 const adminController = {
@@ -10,7 +11,12 @@ const adminController = {
             const admin = await adminModel.findOne({ email: email });
             if (admin) {
                 if (admin.password === password) {
-                    res.send({ msg: "Login Successfully", flag: 1, admin: { ...admin.toJSON(), password: null } })
+                    res.send({
+                        msg: "Login Successfully",
+                        flag: 1,
+                        admin: { ...admin.toJSON(), password: null },
+                        token: generateToken({ ...admin.toJSON() })
+                    })
                 } else {
                     res.send({ msg: "Password do'es not match", flag: 0 })
                 }

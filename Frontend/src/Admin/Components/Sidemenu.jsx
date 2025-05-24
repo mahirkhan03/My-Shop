@@ -1,43 +1,35 @@
-import { FaChartPie, FaThLarge, FaLayerGroup, FaUserShield, FaFileAlt, FaRocket, FaCube, FaCubes } from 'react-icons/fa';
+import { FaChartPie, FaThLarge, FaLayerGroup, FaCube, FaCubes } from 'react-icons/fa';
 import { IoIosArrowForward } from 'react-icons/io';
 import { BiCategory } from "react-icons/bi";
 import { RiProductHuntFill } from "react-icons/ri";
 import { IoIosColorPalette } from "react-icons/io";
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setAdmin } from '../../redux/slice/adminSlices';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import {  setAdmin } from '../../redux/slice/adminSlices';
 
 
 const Sidemenu = () => {
   const navigator = useNavigate();
-  const dispatcher = useDispatch()
-
+  const dispatcher = useDispatch();
   const admin = useSelector((state) => state.admin?.data)
 
   useEffect(
     () => {
-      if (admin === null) {
+    const admin =localStorage.getItem("admin")
+    const token =localStorage.getItem("token")
+      if (admin == null) {
         navigator('/admin/login')
-      } else {
-        navigator('/admin')
+      }else{
+       const lsadmin = JSON.parse(admin)
+       dispatcher(setAdmin({admin:lsadmin , token: token})) 
       }
-    },
-    [admin]
-  )
-
-  useEffect(
-    () => {
-      const admin = localStorage.getItem("admin")
-      const Lsadmin = JSON.parse(admin)
-      dispatcher(setAdmin(
-          {
-            admin:Lsadmin
-          }
-        ))
     },
     []
   )
+
+
   return (
     <aside className="w-full h-screen bg-[#1E1E2D] text-white p-4 space-y-8">
       <div className="text-center text-2xl font-bold tracking-wide">

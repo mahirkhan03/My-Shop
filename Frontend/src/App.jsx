@@ -16,8 +16,9 @@ import EditProduct from './Admin/Pages/Product/EditProduct'
 import MultipleImages from './Admin/Pages/Product/MultipleImages'
 import Login from './Admin/Pages/Login'
 
-export default function App() {
 
+export default function App() {
+  
   const routers = createBrowserRouter([
     {
       path: '/',
