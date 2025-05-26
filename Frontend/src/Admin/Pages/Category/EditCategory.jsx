@@ -3,10 +3,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import axios from 'axios';
 import { MainContext } from '../../../Context';
+import { useSelector } from 'react-redux';
 
 const EditCategory = () => {
+    const admin = useSelector((state) => state.admin);
     const { categoryId } = useParams()
-    
     const { API_BASH_URL, CATEGORY_URL, notify, getCategory, Categories } = useContext(MainContext)
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
@@ -41,9 +42,15 @@ const EditCategory = () => {
         formData.append("name", nameRef.current.value);
         formData.append("slug", slugRef.current.value);
         formData.append("hexcode", slugRef.current.value);
-       
 
-        axios.put(API_BASH_URL + CATEGORY_URL + "/update/" + categoryId, formData).then(
+
+        axios.put(API_BASH_URL + CATEGORY_URL + "/update/" + categoryId, formData,
+            {
+                headers: {
+                    Authorization: admin?.token
+                }
+            }
+        ).then(
             (resp) => {
                 notify(resp.data.msg, resp.data.flag)
                 if (resp.data.flag === 1) {

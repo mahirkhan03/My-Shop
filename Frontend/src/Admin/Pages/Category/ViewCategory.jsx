@@ -4,14 +4,22 @@ import { FiEdit, FiPlus } from "react-icons/fi"
 import { Link } from "react-router-dom";
 import { MainContext } from "../../../Context";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 
 function ViewCategory() {
+  const admin = useSelector((state) => state.admin)
   const { API_BASH_URL, CATEGORY_URL, notify } = useContext(MainContext);
   const { getCategory, Categories } = useContext(MainContext);
 
   function statusHandler(id) {
-    axios.patch(API_BASH_URL + CATEGORY_URL + `/status/${id}`).then(
+    axios.patch(API_BASH_URL + CATEGORY_URL + `/status/${id}`,
+    {},  {
+        headers: {
+          Authorization: admin?.token
+        }
+      }
+    ).then(
       (resp) => {
         notify(resp.data.msg, resp.data.flag)
         if (resp.data.flag === 1) {
@@ -26,8 +34,14 @@ function ViewCategory() {
     )
   }
   function deleteHandler(id) {
-    
-    axios.delete(API_BASH_URL + CATEGORY_URL +`/delete/${id}`).then(
+
+    axios.delete(API_BASH_URL + CATEGORY_URL + `/delete/${id}`,
+      {
+        headers: {
+          Authorization: admin?.token
+        }
+      }
+    ).then(
       (resp) => {
         notify(resp.data.msg, resp.data.flag)
         if (resp.data.flag === 1) {
@@ -46,7 +60,8 @@ function ViewCategory() {
     () => {
       getCategory()
     }, []
-  )
+  ) 
+   
   return (
     <div className="p-6 max-w-7xl mx-auto">
       {/* Title & Add Button */}
@@ -82,7 +97,6 @@ function ViewCategory() {
                   <td className="p-4">{cat.slug}</td>
                   <td className="p-4 px-8">
                     <img width="30px" src={`${API_BASH_URL}images/category/${cat.image}`} />
-
                   </td>
                   <td>
 

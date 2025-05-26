@@ -12,12 +12,20 @@ import {
 } from "react-icons/fa";
 import { MainContext } from "../../../Context";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const viewProduct = () => {
+    const admin = useSelector((state) => state.admin)
     const { product, getProduct, API_BASH_URL, PRODUCT_URL, notify } = useContext(MainContext);
 
     function statusHandler(id, flag) {
-        axios.patch(API_BASH_URL + PRODUCT_URL + `/status/${id}`, { flag }).then(
+        axios.patch(API_BASH_URL + PRODUCT_URL + `/status/${id}`, { flag },
+            {
+                headers: {
+                    Authorization: admin?.token
+                }
+            }
+        ).then(
             (response) => {
                 notify(response.data.msg, response.data.flag,)
                 if (response.data.flag === 1) {
@@ -35,7 +43,13 @@ const viewProduct = () => {
 
     function deleteHandler(id) {
 
-        axios.delete(API_BASH_URL + PRODUCT_URL + `/delete/${id}`).then(
+        axios.delete(API_BASH_URL + PRODUCT_URL + `/delete/${id}`,
+            {
+                headers: {
+                    Authorization: admin?.token
+                }
+            }
+        ).then(
             (resp) => {
                 notify(resp.data.msg, resp.data.flag)
                 if (resp.data.flag === 1) {
@@ -77,7 +91,7 @@ const viewProduct = () => {
                             <tr>
                                 <th className="px-5 py-3">Name</th>
                                 <th className="px-5 py-3">Slug</th>
-                                {/* <th className="px-4 py-3">Thumbnail</th> */}
+                                <th className="px-4 py-3">Thumbnail</th>
                                 <th className="px-5 py-3">Original</th>
                                 <th className="px-5 py-3">Discount %</th>
                                 <th className="px-5 py-3">Final</th>
@@ -92,13 +106,13 @@ const viewProduct = () => {
                                 <tr key={idx} className="border-b hover:bg-gray-50">
                                     <td className="px-4 py-3 font-medium">{product.name}</td>
                                     <td className="px-4 py-3">{product.slug}</td>
-                                    {/* <td className="px-4 py-3">
+                                    <td className="px-6 py-3">
                                         <img
-                                            src={product.thumbnail || "https://via.placeholder.com/40"}
-                                            alt={product.name}
-                                            className="w-10 h-10 object-cover rounded"
+                                            src={`${API_BASH_URL}images/product/${product.thumbnail}`}
+                                            // alt={product.name}
+                                            className="w-12 h-12 "
                                         />
-                                    </td> */}
+                                    </td>
                                     <td className="px-4 py-3">${product.originalPrice}</td>
                                     <td className="px-10 py-3 text-red-600">{product.discoutPercentage}%</td>
                                     <td className="px-4 py-3 text-green-600">${product.finalPrice}</td>

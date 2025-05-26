@@ -4,8 +4,10 @@ import { FaArrowLeft, FaPlus, FaSave, FaToggleOn, FaToggleOff } from "react-icon
 import { MainContext } from "../../../Context";
 import Select from 'react-select'
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const AddProduct = ({ onSubmit }) => {
+    const admin = useSelector((state) => state.admin)
     const { API_BASH_URL, notify, getCategory, Categories, getColors, colors, PRODUCT_URL, product, getProduct } = useContext(MainContext)
     const [selColors, setSelColors] = useState([])
     const [formData, setFormData] = useState({});
@@ -25,7 +27,7 @@ const AddProduct = ({ onSubmit }) => {
 
     function handNameChange() {
         const name = nameRef.current.value;
-        const slug = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g,'');
+        const slug = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
         slugRef.current.value = slug;
     }
 
@@ -43,20 +45,26 @@ const AddProduct = ({ onSubmit }) => {
         formData.append("categoryID", e.target.categoryID.value);
         formData.append("colors", JSON.stringify(selColors));
 
-        axios.post(API_BASH_URL + PRODUCT_URL + "/create", formData).then(
-      (resp) => {
-        notify(resp.data.msg, resp.data.flag)
-        if (resp.data.flag === 1) {
-          e.target.reset()
-        }
-      }
-    ).catch(
-      (error) => {
-        console.log(error)
-        notify("something is wrong", 0)
-      }
-    )
-  }
+        axios.post(API_BASH_URL + PRODUCT_URL + "/create", formData,
+            {
+                headers: {
+                    Authorization: admin?.token
+                }
+            }
+        ).then(
+            (resp) => {
+                notify(resp.data.msg, resp.data.flag)
+                if (resp.data.flag === 1) {
+                    e.target.reset()
+                }
+            }
+        ).catch(
+            (error) => {
+                console.log(error)
+                notify("something is wrong", 0)
+            }
+        )
+    }
     const handleCheckbox = (key) => {
         setFormData({ ...formData, [key]: !formData[key] });
     };

@@ -15,6 +15,7 @@ import AddProduct from './Admin/Pages/Product/AddProduct'
 import EditProduct from './Admin/Pages/Product/EditProduct'
 import MultipleImages from './Admin/Pages/Product/MultipleImages'
 import Login from './Admin/Pages/Login'
+import Store from './Website/Pages/Store'
 
 
 export default function App() {
@@ -27,7 +28,12 @@ export default function App() {
         {
           path: '/',
           element: <Home />
-        }
+        },
+        {
+          path: '/store',
+          element: <Store/>
+        },
+
       ]
     },
     {

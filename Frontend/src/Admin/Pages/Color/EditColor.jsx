@@ -3,13 +3,14 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import axios from 'axios';
 import { MainContext } from '../../../Context';
+import { useSelector } from 'react-redux';
 
 const EditColor = () => {
     const { id } = useParams()
-   
-    const { API_BASH_URL, notify, colors, getColors, COLOR_URL,  } = useContext(MainContext)
+    const admin = useSelector((state) => state.admin);
+    const { API_BASH_URL, notify, colors, getColors, COLOR_URL, } = useContext(MainContext)
     const navigate = useNavigate();
-    
+
     const nameRef = useRef();
     const slugRef = useRef();
 
@@ -26,8 +27,13 @@ const EditColor = () => {
             slug: slugRef.current.value,
             hexcode: e.target.hexcode.value
         }
-
-        axios.put(API_BASH_URL + COLOR_URL + "/update/" + id , data).then(
+        axios.put(API_BASH_URL + COLOR_URL + "/update/" + id, data,
+            {
+                headers: {
+                    Authorization: admin?.token
+                }
+            }
+        ).then(
             (resp) => {
                 notify(resp.data.msg, resp.data.flag)
                 if (resp.data.flag === 1) {

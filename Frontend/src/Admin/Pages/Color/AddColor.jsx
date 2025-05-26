@@ -3,8 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import axios from 'axios';
 import { MainContext } from '../../../Context';
+import { useSelector } from 'react-redux';
 
 const AddColor = () => {
+  const admin = useSelector((state) => state.admin);
   const { API_BASH_URL, COLOR_URL, notify } = useContext(MainContext)
   const navigate = useNavigate();
 
@@ -26,7 +28,13 @@ const AddColor = () => {
     }
 
 
-    axios.post(API_BASH_URL + COLOR_URL + "/create", data).then(
+    axios.post(API_BASH_URL + COLOR_URL + "/create", data,
+      {
+        headers: {
+          Authorization: admin?.token
+        }
+      }
+    ).then(
       (resp) => {
         notify(resp.data.msg, resp.data.flag)
         if (resp.data.flag === 1) {
@@ -59,7 +67,7 @@ const AddColor = () => {
           {/* Category Name */}
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-             Name
+              Name
             </label>
             <input
               type="text"
@@ -74,7 +82,7 @@ const AddColor = () => {
           </div>
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-               Slug
+              Slug
             </label>
             <input
               type="text"
@@ -89,8 +97,8 @@ const AddColor = () => {
 
           {/* Description */}
           <div>
-            <label for="hexcode" className="block text-sm font-medium my-1 text-gray-700">
-            Hex Code
+            <label htmlFor="hexcode" className="block text-sm font-medium my-1 text-gray-700">
+              Hex Code
             </label>
             <input type="color"
               id='hexcode'

@@ -39,9 +39,10 @@ export default function Header() {
         </div>
 
         <nav className="flex gap-6 text-sm font-medium">
-          <a href="#" className="hover:text-teal-600">HOMES <MdKeyboardArrowDown className="inline" /></a>
+          <a href="/" className="hover:text-teal-600">HOMES <MdKeyboardArrowDown className="inline" /></a>
           <a href="#" className="hover:text-teal-600">PAGES <MdKeyboardArrowDown className="inline" /></a>
           <a href="#" className="hover:text-teal-600">PRODUCTS <MdKeyboardArrowDown className="inline" /></a>
+          <a href="/store" className="hover:text-teal-600">STORE <MdKeyboardArrowDown className="inline" /></a>
           <a href="#" className="hover:text-teal-600">CONTACT</a>
         </nav>
 

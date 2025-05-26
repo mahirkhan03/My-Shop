@@ -4,14 +4,21 @@ import { FiEdit, FiPlus } from "react-icons/fi"
 import { Link } from "react-router-dom";
 import { MainContext } from "../../../Context";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 
 function ViewColor() {
+  const admin = useSelector((state) => state.admin)
   const { API_BASH_URL, COLOR_URL, getColors, colors, notify } = useContext(MainContext);
-  
 
   function statusHandler(id) {
-    axios.patch(API_BASH_URL + COLOR_URL + `/status/${id}`).then(
+    axios.patch(API_BASH_URL + COLOR_URL + `/status/${id}`,
+     {}, {
+        headers:{
+          Authorization:admin?.token
+        }
+      }
+    ).then(
       (resp) => {
         notify(resp.data.msg, resp.data.flag)
         if (resp.data.flag === 1) {
@@ -27,7 +34,13 @@ function ViewColor() {
   }
   function deleteHandler(id) {
 
-    axios.delete(API_BASH_URL + COLOR_URL + `/delete/${id}`).then(
+    axios.delete(API_BASH_URL + COLOR_URL + `/delete/${id}`,
+      {
+        headers: {
+          Authorization: admin?.token
+        }
+      }
+    ).then(
       (resp) => {
         notify(resp.data.msg, resp.data.flag)
         if (resp.data.flag === 1) {

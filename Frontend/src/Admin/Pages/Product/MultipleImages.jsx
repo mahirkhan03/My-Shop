@@ -3,8 +3,10 @@ import { Link, useParams } from 'react-router-dom';
 import { FaArrowLeft, FaPlus, FaSave, FaToggleOn, FaToggleOff } from "react-icons/fa";
 import axios from 'axios';
 import { MainContext } from '../../../Context';
+import { useSelector } from 'react-redux';
 
 export default function MultipleImages() {
+    const admin = useSelector((state) => state.admin)
     const { notify, API_BASH_URL, PRODUCT_URL } = useContext(MainContext);
     const { productId } = useParams();
     const SubmitHandler = (e) => {
@@ -13,7 +15,13 @@ export default function MultipleImages() {
         for (let image of e.target.images.files) {
             formData.append("images", image)
         }
-        axios.patch(API_BASH_URL + PRODUCT_URL + "/multiple-image/" + productId, formData).then(
+        axios.patch(API_BASH_URL + PRODUCT_URL + "/multiple-image/" + productId, formData,
+            {
+                headers: {
+                    Authorization: admin?.token
+                }
+            }
+        ).then(
             (resp) => {
                 notify(resp.data.msg, resp.data.flag)
                 if (resp.data.flag === 1) {
