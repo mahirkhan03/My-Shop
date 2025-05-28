@@ -1,6 +1,7 @@
 import React from "react";
 import { FaPhoneAlt, FaUserAlt, FaShoppingCart } from "react-icons/fa";
 import { MdKeyboardArrowDown } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 export default function Header() {
   return (
@@ -12,8 +13,8 @@ export default function Header() {
           <span>(025) 3886 25 16</span>
         </div>
         <div className="flex items-center gap-4 text-gray-600">
-          <a href="#" className="hover:text-black">Sell on Swoo</a>
-          <a href="#" className="hover:text-black">Order Tracki</a>
+          <Link className="hover:text-black">Sell on Swoo</Link>
+          <Link className="hover:text-black">Order Tracking</Link>
           <select className="text-sm bg-transparent outline-none">
             <option value="USD">USD</option>
             <option value="EUR">EUR</option>
@@ -29,9 +30,11 @@ export default function Header() {
       {/* Main Header */}
       <div className="flex items-center justify-between px-6 py-4">
         <div className="flex items-center gap-3">
+          <Link to="/profile">
           <div className="bg-teal-600 text-white rounded-full w-12 h-12 flex items-center justify-center">
             <MdKeyboardArrowDown size={24} />
           </div>
+          </Link>
           <div className="text-teal-600 font-bold text-lg leading-5">
             <div>SWOO</div>
             <div>TECH MART</div>
@@ -39,23 +42,25 @@ export default function Header() {
         </div>
 
         <nav className="flex gap-6 text-sm font-medium">
-          <a href="/" className="hover:text-teal-600">HOMES <MdKeyboardArrowDown className="inline" /></a>
-          <a href="#" className="hover:text-teal-600">PAGES <MdKeyboardArrowDown className="inline" /></a>
-          <a href="#" className="hover:text-teal-600">PRODUCTS <MdKeyboardArrowDown className="inline" /></a>
-          <a href="/store" className="hover:text-teal-600">STORE <MdKeyboardArrowDown className="inline" /></a>
-          <a href="#" className="hover:text-teal-600">CONTACT</a>
+          <Link to={"/"} className="hover:text-teal-600">HOMES <MdKeyboardArrowDown className="inline" /></Link>
+          <Link to={"/pages"} className="hover:text-teal-600">PAGES <MdKeyboardArrowDown className="inline" /></Link>
+          <Link to={"/product"} className="hover:text-teal-600">PRODUCTS <MdKeyboardArrowDown className="inline" /></Link>
+          <Link to={"/store"} className="hover:text-teal-600">STORE <MdKeyboardArrowDown className="inline" /></Link>
+          <Link to={"/contact"} className="hover:text-teal-600">CONTACT</Link>
         </nav>
 
         <div className="flex items-center gap-4">
           <div className="text-xs text-right">
             <div>WELCOME</div>
-            <a href="#" className="text-black font-semibold hover:text-teal-600">LOG IN / </a>
-            <a href="#" className="text-black font-semibold hover:text-teal-600">REGISTER</a>
+            <Link to={"/login"} className="text-black font-semibold hover:text-teal-600">LOG IN / </Link>
+            <Link to={"/register"} className="text-black font-semibold hover:text-teal-600">REGISTER</Link>
           </div>
-          <div className="flex items-center gap-2">
-            <FaShoppingCart className="text-teal-600" size={20} />
-            <span className="font-semibold">$1,689.00</span>
-          </div>
+          <Link to={"/cart"}>
+            <div className="flex items-center gap-2">
+              <FaShoppingCart className="text-teal-600" size={20} />
+              <span className="font-semibold">$1,689.00</span>
+            </div>
+          </Link>
         </div>
       </div>
 

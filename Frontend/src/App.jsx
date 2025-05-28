@@ -16,10 +16,14 @@ import EditProduct from './Admin/Pages/Product/EditProduct'
 import MultipleImages from './Admin/Pages/Product/MultipleImages'
 import Login from './Admin/Pages/Login'
 import Store from './Website/Pages/Store'
+import LoginPage from './Website/Pages/Login'
+import RegisterPage from './Website/Pages/Register'
+import Profilepage from './Website/Pages/Profilepage'
+
 
 
 export default function App() {
-  
+
   const routers = createBrowserRouter([
     {
       path: '/',
@@ -31,8 +35,25 @@ export default function App() {
         },
         {
           path: '/store',
-          element: <Store/>
+          element: <Store />
         },
+        {
+          path: '/login',
+          element: <LoginPage />
+        },
+        {
+          path: '/register',
+          element: <RegisterPage />
+        },
+        {
+          path: '/profile',
+          element: <Profilepage />
+        },
+        {
+          path: '/cart',
+          element: <Profilepage />
+        },
+
 
       ]
     },
