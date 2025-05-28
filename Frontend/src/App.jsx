@@ -34,7 +34,7 @@ export default function App() {
           element: <Home />
         },
         {
-          path: '/store',
+          path: '/store/:categorySlug?',
           element: <Store />
         },
         {

@@ -54,12 +54,22 @@ function Context(props) {
         )
     }
 
-    function getProduct(id = null) {
+    function getProduct(id = null, limit = 0, categorySlug = null, colorslug = null) {
+
         let URL = API_BASH_URL + PRODUCT_URL
         if (id != null) {
             URL = URL + `/${id}`
         }
-        axios.get(URL).then(
+        const query = new URLSearchParams();
+
+        query.append('limit', limit)
+        if (categorySlug) {
+            query.append('categorySlug', categorySlug)
+        }
+        if (colorslug) {
+            query.append('colorslug', colorslug)
+        }
+        axios.get(URL + "?" + query).then(
             (response) => {
                 if (response.data.flag === 1) {
                     setProduct(response.data.product)

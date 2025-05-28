@@ -2,6 +2,8 @@ const { createuniqueimage } = require("../helper")
 const productModel = require("../model/productModel");
 const { unlinkSync } = require('fs')
 const util = require("util");
+const categoryModel = require("../model/categoryModel");
+const colorModel = require("../model/colorModel");
 
 const productController = {
     async create(req, res) {
@@ -43,12 +45,20 @@ const productController = {
     async getdata(req, res) {
         try {
             const id = req.params.id;
-            let product = null;
+            const filterQuery = {};
+            if (req.query.categorySlug) {
+                const category = await categoryModel.findOne({ slug: req.query.categorySlug });
+                filterQuery.categoryID = category._id
+            }
+            if (req.query.colorslug) {
+                const color = await colorModel.findOne({ slug: req.query.colorslug });
+                filterQuery.colors = { $in: [color._id] };
+            }
+
             if (id) {
                 product = await productModel.findById(id)
-
             } else {
-                product = await productModel.find().populate(["categoryID", "colors"]);
+                product = await productModel.find(filterQuery).limit(req.query.limit || 0).populate(["categoryID", "colors"]);
             }
             if (!product) {
                 return res.send({ msg: "No Product found", flag: 0 });
