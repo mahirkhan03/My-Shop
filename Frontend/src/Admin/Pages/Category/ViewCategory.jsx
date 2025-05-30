@@ -8,18 +8,11 @@ import { useSelector } from "react-redux";
 
 
 function ViewCategory() {
-  const admin = useSelector((state) => state.admin)
   const { API_BASH_URL, CATEGORY_URL, notify } = useContext(MainContext);
   const { getCategory, Categories } = useContext(MainContext);
 
   function statusHandler(id) {
-    axios.patch(API_BASH_URL + CATEGORY_URL + `/status/${id}`,
-    {},  {
-        headers: {
-          Authorization: admin?.token
-        }
-      }
-    ).then(
+    axios.patch(API_BASH_URL + CATEGORY_URL + `/status/${id}`).then(
       (resp) => {
         notify(resp.data.msg, resp.data.flag)
         if (resp.data.flag === 1) {
@@ -35,13 +28,7 @@ function ViewCategory() {
   }
   function deleteHandler(id) {
 
-    axios.delete(API_BASH_URL + CATEGORY_URL + `/delete/${id}`,
-      {
-        headers: {
-          Authorization: admin?.token
-        }
-      }
-    ).then(
+    axios.delete(API_BASH_URL + CATEGORY_URL + `/delete/${id}`).then(
       (resp) => {
         notify(resp.data.msg, resp.data.flag)
         if (resp.data.flag === 1) {

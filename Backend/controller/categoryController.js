@@ -2,6 +2,7 @@ const { createuniqueimage } = require("../helper");
 const categoryModel = require("../model/categoryModel");
 const { unlinkSync } = require("fs");
 const productModel = require("../model/productModel");
+const { timeStamp } = require("console");
 
 
 const categoryController = {
@@ -39,51 +40,40 @@ const categoryController = {
                     }
                 }
             )
-
-
-
         } catch (err) {
             res.send({ msg: "Internal Server Error", flag: 0 })
         }
 
     },
-
-    async getdata(req, res) {
-
-
-        try {
-            const id = req.params.id;
-            let categories = null;
-            if (id) {
-                categories = await categoryModel.findById(id)
-                res.send({ msg: "Categories fethed successfully", flag: 1, categories })
-            } else {
-                categories = await categoryModel.find();
-                const allcategory = [];
-                const allPromise = categories.map(
-                    async (category) => {
-                        const productCount = await productModel.findOne({ categoryID: category._id }).countDocuments();
-
-                        allcategory.push({
-                            ...category.toJSON(),
-                            productCount: productCount
-                        });
-                    }
-                )
-                await Promise.all(allPromise)
-                res.send({ msg: "Categories fethed successfully", flag: 1, categories: allcategory })
-            }
-            if (!categories) {
-                return res.send({ msg: "No Categories found", flag: 0 });
-            }
-
-
-        } catch (err) {
-            res.send({ msg: "Internal Server Error", flag: 0 })
-        }
-
-    },
-
+    async  getdata(req, res) {
+  try {
+    const id = req.params.id;
+    if (id) {
+      const category = await categoryModel.findById(id);
+      if (!category) {
+        return res.send({ msg: "No Category found", flag: 0 });
+      }
+      return res.send({ msg: "Category fetched successfully", flag: 1, category });
+    } else {
+      const categories = await categoryModel.find();
+      const allCategories = await Promise.all(
+        categories.map(async (category) => {
+          const productCount = await productModel.countDocuments({ categoryID: category._id });
+          return {
+            ...category.toObject(),
+            productCount,
+          };
+        })
+      );
+      allCategories.sort((a, b) => b.productCount - a.productCount);
+      return res.send({ msg: "Categories fetched successfully", flag: 1, categories: allCategories });
+    }
+  } catch (err) {
+    console.error(err);
+    return res.send({ msg: "Internal Server Error", flag: 0 });
+  }
+}
+,
     async status(req, res) {
         try {
             const id = req.params.id;
@@ -105,6 +95,7 @@ const categoryController = {
             )
 
         } catch (error) {
+            console.log(error);
             res.send({ msg: "Internal Server Error", flag: 0 })
         }
 
@@ -139,7 +130,7 @@ const categoryController = {
     async update(req, res) {
         try {
             const id = req.params.id;
-            const image = req.files && req.files.Image ? req.files.image : null;
+            const image = req.files && req.files.image ? req.files.image : null;
             const category = await categoryModel.findById(id);
             if (!category) {
                 return res.send({ msg: "No Categories found", flag: 0 });

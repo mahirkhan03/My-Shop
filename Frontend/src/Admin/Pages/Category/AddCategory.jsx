@@ -7,21 +7,12 @@ import { useSelector } from 'react-redux';
 
 
 const AddCategory = () => {
-  const admin = useSelector((state) => state.admin);
+  const admin = useSelector((state) => state.admin);  
+  console.log(admin);
+  
   const { API_BASH_URL, CATEGORY_URL, notify } = useContext(MainContext)
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-  });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission logic here
-    console.log('Form submitted:', formData);
-    // Reset form
-    setFormData({ name: '', description: '' });
-  };
   const nameRef = useRef();
   const slugRef = useRef();
 

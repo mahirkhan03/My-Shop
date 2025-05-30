@@ -105,6 +105,7 @@ const productController = {
             }
 
         } catch (error) {
+            console.log(error);
             res.send({ msg: "Internal Server Error", flag: 0 })
         }
 
@@ -127,8 +128,11 @@ const productController = {
     },
     async update(req, res) {
         try {
+            console.log(req.files.thumbnail);
+            
             const id = req.params.id;
-            const image = req.files && req.files.image ? req.files.image : null;
+            const image = req.files && req.files.thumbnail ? req.files.thumbnail : null;
+        
             const product = await productModel.findById(id);
 
             if (!product) {

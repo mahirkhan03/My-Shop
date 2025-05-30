@@ -6,9 +6,9 @@ const adminAuth = require("../middleware/adminAuth");
 
 productRouter.post('/create', [adminAuth, fileuploader({ createParentPath: true })], productController.create)
 productRouter.get('/:id?', productController.getdata);
-productRouter.patch('/status/:id', adminAuth, productController.status);
-productRouter.put('/update/:id',fileuploader({ createParentPath: true }), productController.update);
-productRouter.delete('/delete/:id', adminAuth, productController.delete);
+productRouter.patch('/status/:id', productController.status);
+productRouter.put('/update/:id', [ fileuploader({ createParentPath: true })], productController.update);
+productRouter.delete('/delete/:id', productController.delete);
 productRouter.patch('/multiple-image/:id', fileuploader({ createParentPath: true }), productController.multiple);
 
 

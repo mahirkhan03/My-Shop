@@ -6,7 +6,6 @@ import { MainContext } from '../../../Context';
 import { useSelector } from 'react-redux';
 
 const EditCategory = () => {
-    const admin = useSelector((state) => state.admin);
     const { categoryId } = useParams()
     const { API_BASH_URL, CATEGORY_URL, notify, getCategory, Categories } = useContext(MainContext)
     const navigate = useNavigate();
@@ -15,18 +14,6 @@ const EditCategory = () => {
         description: '',
     });
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Handle form submission logic here
-        console.log('Form submitted:', formData);
-        // Reset form
-        setFormData({ name: '', description: '' });
-    };
     const nameRef = useRef();
     const slugRef = useRef();
 
@@ -38,19 +25,14 @@ const EditCategory = () => {
 
     function submitHandle(e) {
         e.preventDefault();
+        console.log(e.target.category_image.files[0]);
+
         const formData = new FormData()
         formData.append("name", nameRef.current.value);
         formData.append("slug", slugRef.current.value);
-        formData.append("hexcode", slugRef.current.value);
+        formData.append("image", e.target.category_image.files[0]);
 
-
-        axios.put(API_BASH_URL + CATEGORY_URL + "/update/" + categoryId, formData,
-            {
-                headers: {
-                    Authorization: admin?.token
-                }
-            }
-        ).then(
+        axios.put(API_BASH_URL + CATEGORY_URL + "/update/" + categoryId, formData).then(
             (resp) => {
                 notify(resp.data.msg, resp.data.flag)
                 if (resp.data.flag === 1) {

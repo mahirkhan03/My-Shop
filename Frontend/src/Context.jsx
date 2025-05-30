@@ -2,9 +2,11 @@ import React, { createContext, useContext, useState } from 'react'
 const MainContext = createContext();
 import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 
 function Context(props) {
+    const admin = useSelector((state) => state.admin)
     const [Categories, setCategories] = useState([]);
     const [colors, setColors] = useState([]);
     const [product, setProduct] = useState([]);
@@ -23,18 +25,19 @@ function Context(props) {
 
         }
         axios.get(URL).then(
-            (response) => {
-                if (response.data.flag === 1) {
-                    setCategories(response.data.categories)
+                (response) => {
+                    if (response.data.flag === 1) {
+                        setCategories(response.data.categories)
+                    }
                 }
-            }
-        ).catch(
-            (error) => {
-                setCategories([]);
+            ).catch(
+                (error) => {
+                    setCategories([]);
 
-            }
-        )
+                }
+            )
     }
+    
 
     function getColors(id = null) {
         let URL = API_BASH_URL + COLOR_URL
@@ -61,7 +64,6 @@ function Context(props) {
             URL = URL + `/${id}`
         }
         const query = new URLSearchParams();
-
         query.append('limit', limit)
         if (categorySlug) {
             query.append('categorySlug', categorySlug)

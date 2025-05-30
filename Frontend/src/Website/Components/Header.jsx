@@ -1,9 +1,21 @@
 import React from "react";
+import { useEffect } from "react";
 import { FaPhoneAlt, FaUserAlt, FaShoppingCart } from "react-icons/fa";
 import { MdKeyboardArrowDown } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { lstoCart } from "../../redux/slice/cartSlices";
 
 export default function Header() {
+  const dispatcher = useDispatch();
+  const cart = useSelector((state) => state.cart);
+
+  useEffect(
+    () => {
+dispatcher(lstoCart())
+    },
+    []
+  )
   return (
     <header className="bg-white shadow-md">
       {/* Top Header */}
@@ -31,9 +43,9 @@ export default function Header() {
       <div className="flex items-center justify-between px-6 py-4">
         <div className="flex items-center gap-3">
           <Link to="/profile">
-          <div className="bg-teal-600 text-white rounded-full w-12 h-12 flex items-center justify-center">
-            <MdKeyboardArrowDown size={24} />
-          </div>
+            <div className="bg-teal-600 text-white rounded-full w-12 h-12 flex items-center justify-center">
+              <MdKeyboardArrowDown size={24} />
+            </div>
           </Link>
           <div className="text-teal-600 font-bold text-lg leading-5">
             <div>SWOO</div>
@@ -56,8 +68,9 @@ export default function Header() {
             <Link to={"/register"} className="text-black font-semibold hover:text-teal-600">REGISTER</Link>
           </div>
           <Link to={"/cart"}>
-            <div className="flex items-center gap-2">
-              <FaShoppingCart className="text-teal-600" size={20} />
+            <div className="flex items-center relative gap-2">
+              <FaShoppingCart className="text-gray-500 text-3xl" />
+              <span className="text-white bg-teal-700 px-1.5 flex text-center items-center rounded-full absolute -top-4 left-3.5" >{cart.items.length}</span>
               <span className="font-semibold">$1,689.00</span>
             </div>
           </Link>

@@ -27,6 +27,7 @@ function RegisterPage() {
                         <img src="/public/login.svg.svg" alt="" />
                     </div>
                 </div>
+                
 
                 {/* Right Form */}
                 <div className="w-full md:w-1/2 p-10">
