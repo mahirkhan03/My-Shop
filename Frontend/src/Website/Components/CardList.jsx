@@ -4,9 +4,11 @@ import { FiMinus, FiPlus } from 'react-icons/fi';
 import { useDispatch, useSelector } from 'react-redux';
 import { MainContext } from '../../Context';
 import { qtyHandler } from '../../redux/slice/cartSlices';
+import { useNavigate } from 'react-router-dom';
 
 function CartList() {
   const dispatcher = useDispatch();
+  const navigate = useNavigate()
 
   function handCare(payload) {
     dispatcher(qtyHandler(payload));
@@ -14,10 +16,23 @@ function CartList() {
 
   const cart = useSelector((state) => state.cart);
   const { product, getProduct, API_BASH_URL } = useContext(MainContext);
+  const user = useSelector((state) => state.user)
+
+  function checkoutHandler (){
+    if(user.data && user.user_token){
+      navigate('/checkout')
+    }
+    else{
+      navigate('/login')
+    }
+  }
+ 
+
 
   useEffect(() => {
     getProduct();
   }, []);
+
 
   return (
     <div className="w-full bg-gray-50 min-h-screen p-6">
@@ -53,7 +68,7 @@ function CartList() {
                   <p className="text-red-600 text-lg px-4  font-semibold mt-1">${currentProduct.finalPrice}</p>
 
                   {/* Quantity Controls */}
-                  <div className="flex items-center px-4 mt-2 space-x-2">
+                  <div className="flex items-center px-4 mt-2 cursor-pointer space-x-2">
                     <button
                       onClick={() =>
                         handCare({
@@ -63,7 +78,7 @@ function CartList() {
                           original_price: currentProduct.originalPrice,
                         })
                       }
-                      className="p-1 border rounded"
+                      className="p-1 border rounded cursor-pointer"
                     >
                       <FiMinus />
                     </button>
@@ -78,7 +93,7 @@ function CartList() {
                           original_price: currentProduct.originalPrice,
                         })
                       }
-                      className="p-1 border rounded"
+                      className="p-1 border rounded cursor-pointer"
                     >
                       <FiPlus />
                     </button>
@@ -114,7 +129,7 @@ function CartList() {
               <span>{cart.final_total}</span>
             </div>
           </div>
-          <button className="mt-6 w-full bg-teal-600 text-white py-2 rounded-full font-semibold hover:bg-teal-700 transition">
+          <button onClick={checkoutHandler} className="mt-6 w-full bg-teal-600 text-white py-2 rounded-full font-semibold hover:bg-teal-700 transition">
             CHECKOUT
           </button>
         </div>
