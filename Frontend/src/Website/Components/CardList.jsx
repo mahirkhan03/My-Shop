@@ -23,12 +23,10 @@ function CartList() {
       navigate('/checkout')
     }
     else{
-      navigate('/login')
+      navigate('/login?ref=checkout')
     }
   }
  
-
-
   useEffect(() => {
     getProduct();
   }, []);

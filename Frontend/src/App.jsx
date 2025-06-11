@@ -21,6 +21,7 @@ import RegisterPage from './Website/Pages/Register'
 import Profilepage from './Website/Pages/Profilepage'
 import CardList from './Website/Components/CardList'
 import Contact from './Website/Pages/Contact'
+import Product from './Website/Pages/Product'
 
 
 
@@ -58,6 +59,10 @@ export default function App() {
         {
           path: '/contact',
           element: <Contact/>
+        },
+        {
+          path: '/product',
+          element: <Product/>
         },
 
 

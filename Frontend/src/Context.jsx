@@ -15,6 +15,7 @@ function Context(props) {
     const COLOR_URL = "color"
     const PRODUCT_URL = "product"
     const ADMIN_URL = "admin"
+    const USER_URL = "user"
 
     const notify = (msg, flag) => toast(msg, { type: flag ? 'success' : 'error' });
 
@@ -86,7 +87,7 @@ function Context(props) {
 
 
     return (
-        <MainContext.Provider value={{ API_BASH_URL, ADMIN_URL, CATEGORY_URL, notify, getCategory, Categories, COLOR_URL, getColors, colors, PRODUCT_URL, product, getProduct }}>
+        <MainContext.Provider value={{ API_BASH_URL,USER_URL, ADMIN_URL, CATEGORY_URL, notify, getCategory, Categories, COLOR_URL, getColors, colors, PRODUCT_URL, product, getProduct }}>
             <ToastContainer
                 position="top-right"
                 autoClose={5000}

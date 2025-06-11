@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   data: null,
-  user_token: null
+  user_token: null,
 };
 
 export const userSlice = createSlice({
@@ -16,10 +16,9 @@ export const userSlice = createSlice({
 
     },
     lstoUser(state) {
-      const user = localStorage.getItem("user");
-
+      const user = JSON.parse(localStorage.getItem("user"));
       if (user) {
-        state.data = JSON.parse(user.data);
+        state.data = user.data;
         state.user_token = user.user_token;
       }
     },
