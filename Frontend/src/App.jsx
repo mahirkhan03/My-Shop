@@ -22,6 +22,7 @@ import Profilepage from './Website/Pages/Profilepage'
 import CardList from './Website/Components/CardList'
 import Contact from './Website/Pages/Contact'
 import Product from './Website/Pages/Product'
+import About from './Website/Pages/About'
 
 
 
@@ -35,6 +36,10 @@ export default function App() {
         {
           path: '/',
           element: <Home />
+        },
+        {
+          path: '/about',
+          element: <About />
         },
         {
           path: '/store/:categorySlug?',

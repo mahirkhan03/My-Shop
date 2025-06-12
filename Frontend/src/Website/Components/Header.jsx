@@ -8,7 +8,7 @@ import { lstoCart } from "../../redux/slice/cartSlices";
 import { lstoUser } from "../../redux/slice/userSlices";
 
 export default function Header() {
-  const user = useSelector((state) => state.user)
+  const user = useSelector((state) => state.user.data)
   const dispatcher = useDispatch();
   const cart = useSelector((state) => state.cart);
 
@@ -68,12 +68,26 @@ export default function Header() {
           <div className="text-xs text-right">
             <div>WELCOME</div>
             {
-              user == null ?
-                <Link to="/login?ref=header" className="text-black cursor-pointer font-semibold hover:text-teal-600">LOG IN /REGISTER </Link>
-                :
-                <div className="text-black text-lg font-bold cursor-pointer hover:text-teal-600">Logout</div>
+              user == null ? (
+                <div className="flex gap-2">
+                  <Link to="/login?ref=header" className="text-black font-semibold hover:text-teal-600">LOGIN</Link>
+                  <span>/</span>
+                  <Link to="/register?ref=header" className="text-black font-semibold hover:text-teal-600">REGISTER</Link>
+                </div>
+              ) : (
+                <button
+                  onClick={() => {
+                    // Dispatch logout logic here
+                    dispatcher(setUser({ user: null, user_token: null }));
+                  }}
+                  className="text-black text-sm font-bold cursor-pointer hover:text-teal-600"
+                >
+                  LOGOUT
+                </button>
+              )
             }
           </div>
+
           <Link to={"/cart"}>
             <div className="flex items-center relative gap-2">
               <FaShoppingCart className="text-gray-500 text-3xl" />

@@ -38,11 +38,9 @@ function RegisterPage() {
                             user_token: resp.data.token
                         }
                     ))
-                    if (searchParams.get("ref") === checkout) {
-                        navigator("/checkout")
-                    } else {
-                        navigator("/")
-                    }
+
+                    navigator("/")
+
                 }
             }
         ).catch(
@@ -52,14 +50,16 @@ function RegisterPage() {
             }
         )
     }
-    
+
     useEffect(
         () => {
-            if (user != null) {
+            if (user.data != null) {
                 navigator("/")
             }
-        }, [user]
+        },
+        [user]
     )
+
     return (
         <>
             <div className="w-full bg-white mt-5 px-6 py-3 rounded-full shadow-sm mb-6">

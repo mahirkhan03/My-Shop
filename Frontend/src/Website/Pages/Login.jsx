@@ -9,10 +9,12 @@ import { setUser } from '../../redux/slice/userSlices';
 import { useEffect } from 'react';
 
 function LoginPage() {
-  const user = useSelector((state) => state.user)
+  const user = useSelector((state) => state.user.data)
   const [searchParams, setSearchParams] = useSearchParams();
   const { API_BASH_URL, USER_URL, notify } = useContext(MainContext)
   const [showPassword, setShowPassword] = useState(false);
+  const cartData = JSON.parse(localStorage.getItem("cart"));
+  const cart = cartData ? cartData.items : null
 
   const Dispatcher = useDispatch();
   const navigator = useNavigate();
@@ -24,7 +26,7 @@ function LoginPage() {
     }
 
     axios.post(API_BASH_URL + USER_URL + "/login", data).then(
-      (resp) => {
+      async (resp) => {
         notify(resp.data.msg, resp.data.flag)
         if (resp.data.flag === 1) {
           e.target.reset()
@@ -34,6 +36,14 @@ function LoginPage() {
               user_token: resp.data.token
             }
           ))
+
+          const updateCart = await axios.post(`${API_BASH_URL}cart/move-to-db`, {
+            cart: cart != null ? cart : null
+          })
+          console.log(updateCart);
+          
+
+
           if (searchParams.get("ref") === "checkout")
             navigator("/checkout")
 
