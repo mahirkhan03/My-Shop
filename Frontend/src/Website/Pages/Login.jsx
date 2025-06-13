@@ -38,11 +38,29 @@ function LoginPage() {
           ))
 
           const updateCart = await axios.post(`${API_BASH_URL}cart/move-to-db`, {
-            cart: cart != null ? cart : null
+            cart: cart != null ? cart : null,
+            user_id: resp.data?.user?._id
           })
-          console.log(updateCart);
-          
+          let final_total = 0;
+          let original_total = 0;
 
+          const cartUpdate = updateCart.data.cart.map(
+            (cd) => {
+              const { product_id, qty, user_id } = cd;
+              final_total += (product_id.finalPrice * qty)
+              original_total += (product_id.originalPrice * qty)
+
+              return {
+                productId: product_id._id,
+                qty: qty
+              }
+
+            }
+          )
+
+          localStorage.setItem("cart", JSON.stringify({
+            items: cartUpdate, final_total, original_total
+          }))
 
           if (searchParams.get("ref") === "checkout")
             navigator("/checkout")
