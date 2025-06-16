@@ -65,7 +65,7 @@ const Contact = () => {
               <a href="#"><i className="fab fa-pinterest"></i></a>
             </div>
             <img
-              src="https://via.placeholder.com/250x150"
+              src="/public/contact.png.svg"
               alt="Contact"
               className="rounded-lg"
             />

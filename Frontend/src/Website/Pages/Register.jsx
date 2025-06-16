@@ -14,7 +14,7 @@ function RegisterPage() {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
     const { API_BASH_URL, USER_URL, notify } = useContext(MainContext)
-
+    
 
     const Dispatcher = useDispatch();
     const navigator = useNavigate();

@@ -24,6 +24,7 @@ import Contact from './Website/Pages/Contact'
 import Product from './Website/Pages/Product'
 import About from './Website/Pages/About'
 import Checkout from './Website/Pages/CheckOut'
+import ThankYou from './Website/Pages/Thankyou'
 
 
 
@@ -60,19 +61,23 @@ export default function App() {
         },
         {
           path: '/cart',
-          element: <CardList/>
+          element: <CardList />
         },
         {
           path: '/contact',
-          element: <Contact/>
+          element: <Contact />
         },
         {
           path: '/product',
-          element: <Product/>
+          element: <Product />
         },
         {
           path: '/checkout',
-          element: <Checkout/>
+          element: <Checkout />
+        },
+        {
+          path: "/thank-you/:orderId",
+          element: <ThankYou />
         },
 
 
