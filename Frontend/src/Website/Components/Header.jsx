@@ -4,8 +4,8 @@ import { FaPhoneAlt, FaUserAlt, FaShoppingCart } from "react-icons/fa";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { lstoCart } from "../../redux/slice/cartSlices";
-import { lstoUser } from "../../redux/slice/userSlices";
+import { emtyCard, lstoCart } from "../../redux/slice/cartSlices";
+import { lstoUser, userLogout } from "../../redux/slice/userSlices";
 
 export default function Header() {
   const user = useSelector((state) => state.user.data)
@@ -19,6 +19,11 @@ export default function Header() {
     },
     []
   )
+
+  function logOutHandler(){
+dispatcher(userLogout());
+dispatcher(emtyCard());
+  }
   return (
     <header className="bg-white shadow-md">
       {/* Top Header */}
@@ -76,10 +81,7 @@ export default function Header() {
                 </div>
               ) : (
                 <button
-                  onClick={() => {
-                    // Dispatch logout logic here
-                    dispatcher(setUser({ user: null, user_token: null }));
-                  }}
+                  onClick={logOutHandler}
                   className="text-black text-sm font-bold cursor-pointer hover:text-teal-600"
                 >
                   LOGOUT

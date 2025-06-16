@@ -23,6 +23,7 @@ import CardList from './Website/Components/CardList'
 import Contact from './Website/Pages/Contact'
 import Product from './Website/Pages/Product'
 import About from './Website/Pages/About'
+import Checkout from './Website/Pages/CheckOut'
 
 
 
@@ -68,6 +69,10 @@ export default function App() {
         {
           path: '/product',
           element: <Product/>
+        },
+        {
+          path: '/checkout',
+          element: <Checkout/>
         },
 
 

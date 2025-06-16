@@ -35,7 +35,39 @@ const cartController = {
             console.log(error)
             res.send({ msg: "Internal server error", flag: 0 })
         }
+    },
+    async addtoDb(req, res) {
+        try {
+            const { userId, productId, qty } = req.body;
+
+            if (!userId || !productId || !qty) {
+                return res.send({ msg: "Missing required fields", flag: 0 })
+            }
+            const existingItem = await CartModel.findOne({ user_id: userId, product_id: productId });
+
+            if (existingItem) {
+                await CartModel.updateOne(
+                    { _id: existingItem._id },
+                    { $inc: { qty: Number(qty) } }
+                );
+            } else {
+
+                const newItem = new CartModel({
+                    user_id: userId,
+                    product_id: productId,
+                    qty: Number(qty)
+                });
+                await newItem.save();
+            }
+
+            return res.send({ msg: "Cart updated successfully", flag: 1 });
+
+        } catch (error) {
+            console.log(error);
+            return res.send({ msg: "Internal server error", flag: 0 })
+        }
     }
+
 
 }
 module.exports = cartController;

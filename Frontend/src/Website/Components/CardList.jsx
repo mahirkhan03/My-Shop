@@ -116,15 +116,15 @@ function CartList() {
           <div className="text-sm space-y-2">
             <div className="flex justify-between">
               <span>Original Total:</span>
-              <span className="font-semibold">{cart.original_total}</span>
+              <span className="font-semibold">₹{cart.original_total}</span>
             </div>
             <div className="flex justify-between">
               <span>Savings:</span>
-              <span className="font-semibold">{cart.original_total - cart.final_total}</span>
+              <span className="font-semibold">₹{cart.original_total - cart.final_total}</span>
             </div>
             <div className="border-t pt-2 flex justify-between font-semibold">
               <span>ORDER TOTAL:</span>
-              <span>{cart.final_total}</span>
+              <span>₹{cart.final_total}</span>
             </div>
           </div>
           <button onClick={checkoutHandler} className="mt-6 w-full bg-teal-600 text-white py-2 rounded-full font-semibold hover:bg-teal-700 transition">

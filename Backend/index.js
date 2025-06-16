@@ -8,6 +8,8 @@ const productRouter = require("./router/productRouter");
 const adminRouter = require('./router/adminRouter');
 const userRouter = require('./router/userRouter');
 const cartRouter = require('./router/cartRouter');
+const orderRouter = require('./router/orderRouter');
+
 const server = express();
 server.use(cors());
 server.use(express.json());
@@ -17,6 +19,7 @@ server.use('/product', productRouter)
 server.use('/admin', adminRouter)
 server.use('/user', userRouter)
 server.use('/cart', cartRouter)
+server.use('/order', orderRouter)
 server.use(express.static("./public"))
 
 

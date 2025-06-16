@@ -56,10 +56,16 @@ export const cartSlice = createSlice({
       }
 
       localStorage.setItem("cart", JSON.stringify(state));
+    },
+    emtyCard(state) {
+      state.items = [];
+      state.final_total = 0;
+      state.original_total = 0;
+      localStorage.removeItem("cart")
     }
 
   }
 });
 
-export const { additems, lstoCart, qtyHandler } = cartSlice.actions;
+export const { additems, lstoCart, qtyHandler, emtyCard } = cartSlice.actions;
 export default cartSlice.reducer;
