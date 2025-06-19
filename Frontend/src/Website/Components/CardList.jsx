@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { MainContext } from '../../Context';
 import { qtyHandler } from '../../redux/slice/cartSlices';
 import { useNavigate } from 'react-router-dom';
+import { formatToIndianCurrency } from "../../helper"
 
 function CartList() {
   const dispatcher = useDispatch();
@@ -63,7 +64,7 @@ function CartList() {
                 </div>
                 <div className="ml-4 flex-1">
                   <h4 className="text-lg px-4 font-bold">{currentProduct.name}</h4>
-                  <p className="text-red-600 text-lg px-4  font-semibold mt-1">${currentProduct.finalPrice}</p>
+                  <p className="text-red-600 text-lg px-4  font-semibold mt-1">{formatToIndianCurrency(currentProduct.finalPrice)}</p>
 
                   {/* Quantity Controls */}
                   <div className="flex items-center px-4 mt-2 cursor-pointer space-x-2">
@@ -116,15 +117,15 @@ function CartList() {
           <div className="text-sm space-y-2">
             <div className="flex justify-between">
               <span>Original Total:</span>
-              <span className="font-semibold">₹{cart.original_total}</span>
+              <span className="font-semibold">{formatToIndianCurrency(cart.original_total)}</span>
             </div>
             <div className="flex justify-between">
               <span>Savings:</span>
-              <span className="font-semibold">₹{cart.original_total - cart.final_total}</span>
+              <span className="font-semibold">{formatToIndianCurrency(cart.original_total - cart.final_total)}</span>
             </div>
             <div className="border-t pt-2 flex justify-between font-semibold">
               <span>ORDER TOTAL:</span>
-              <span>₹{cart.final_total}</span>
+              <span>{formatToIndianCurrency(cart.final_total)}</span>
             </div>
           </div>
           <button onClick={checkoutHandler} className="mt-6 w-full bg-teal-600 text-white py-2 rounded-full font-semibold hover:bg-teal-700 transition">

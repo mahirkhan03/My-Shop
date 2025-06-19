@@ -5,6 +5,7 @@ import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { additems } from "../../redux/slice/cartSlices";
 import axios from "axios";
+import { formatToIndianCurrency } from "../../helper"
 
 const Store = () => {
   const user = useSelector((state) => state.user.data)
@@ -141,8 +142,8 @@ const Store = () => {
                 </div>
                 <div className="p-4">
                   <h3 className="text-lg font-semibold text-gray-900">{product.name}</h3>
-                  <p className="text-sm text-gray-400 line-through">Price: {product.originalPrice}</p>
-                  <p className="text-xl font-bold text-green-600 mb-4">Price: {product.finalPrice}</p>
+                  <p className="text-sm text-gray-400 line-through">{formatToIndianCurrency(product.originalPrice)}</p>
+                  <p className="text-xl font-bold text-green-600 mb-4">{formatToIndianCurrency(product.finalPrice)}</p>
                   {/* <p className="text-xl font-bold text-green-600 mb-4"> {product._id}</p> */}
                   <button onClick={() => {
                     cartHandler(
