@@ -14,7 +14,7 @@ const Checkout = () => {
     const navigate = useNavigate();
 
     const [selectedAddress, setSelectedAddress] = useState(0);
-    const [paymentMode, setPaymentMode] = useState(0);
+    const [paymentMode, setPaymentMode] = useState(0); // 0 = COD, 1 = Online
 
     const loadRazorpayScript = (src) => {
         return new Promise((resolve) => {
@@ -26,15 +26,21 @@ const Checkout = () => {
         });
     };
 
-
     const handlePlaceOrder = async () => {
         try {
+            const address = { ...user?.data?.shipping_address[selectedAddress] };
+
+            if (!address.name) {
+                address.name = user?.data?.name || "Customer";
+            }
+
             const response = await axios.post(`${API_BASH_URL}order/place-order`, {
                 user_id: user.data?._id,
                 order_total: cart.final_total,
                 payment_mode: paymentMode,
-                shipping_details: user?.data?.shipping_address[selectedAddress],
+                shipping_details: address,
             });
+
 
             const data = response.data;
             notify(data.msg, data.flag);
@@ -47,15 +53,16 @@ const Checkout = () => {
                 return;
             }
 
+            // Online payment: Load Razorpay SDK
             const res = await loadRazorpayScript("https://checkout.razorpay.com/v1/checkout.js");
 
             if (!res) {
-                notify("Failed to load Razorpay SDK. Please try again.", 0);
+                notify("Failed to load Razorpay. Try again.", 0);
                 return;
             }
 
             const options = {
-                key: "rzp_test_EqDIiJ15v780zg", // Replace in prod
+                key: "rzp_test_EqDIiJ15v780zg", // ✅ replace with live key in prod
                 currency: "INR",
                 amount: cart.final_total * 100,
                 name: "ISHOP",
@@ -65,7 +72,7 @@ const Checkout = () => {
                     email: user?.data?.email,
                     contact: user?.data?.shipping_address[selectedAddress]?.contact,
                 },
-                handler: async (razorpay_response) => {
+                handler: async function (razorpay_response) {
                     try {
                         const confirmRes = await axios.post(`${API_BASH_URL}order/success`, {
                             order_id: data.order_id,
@@ -77,11 +84,11 @@ const Checkout = () => {
                             dispatch(emtyCard());
                             navigate(`/thank-you/${data.order_id}`);
                         } else {
-                            notify("Payment succeeded but order confirmation failed.", 0);
+                            notify(confirmRes.data.message || "Payment confirmed, but order failed.", 0);
                         }
                     } catch (err) {
-                        notify("Payment handler error", 0);
-                        console.error(err);
+                        console.error("❌ Payment handler error:", err);
+                        notify("Something went wrong confirming payment.", 0);
                     }
                 },
                 theme: {
@@ -91,13 +98,11 @@ const Checkout = () => {
 
             const paymentObject = new window.Razorpay(options);
             paymentObject.open();
-
         } catch (err) {
-            console.error("Place order error:", err);
-            notify("Failed to place order.", 0);
+            console.error("❌ Place order error:", err);
+            notify("Failed to place order. Please try again.", 0);
         }
     };
-
 
     return (
         <div className="min-h-screen bg-gray-100 p-6">
@@ -106,24 +111,30 @@ const Checkout = () => {
                 <div className="flex-1 bg-white shadow-lg rounded-lg p-6">
                     <h1 className="text-2xl font-semibold text-gray-800 mb-6">Checkout</h1>
 
-                    {/* Address */}
+                    {/* Address Selection */}
                     <div className="mb-8">
                         <h2 className="text-xl font-semibold text-gray-700 mb-4">Select Address</h2>
                         {user?.data?.shipping_address?.map((address, index) => (
                             <div
                                 key={index}
                                 onClick={() => setSelectedAddress(index)}
-                                className={`p-4 border rounded-lg mb-4 cursor-pointer ${selectedAddress === index ? "border-blue-500 bg-blue-50" : "border-gray-300"}`}
+                                className={`p-4 border rounded-lg mb-4 cursor-pointer ${selectedAddress === index ? "border-blue-500 bg-blue-50" : "border-gray-300"
+                                    }`}
                             >
                                 <p className="font-medium">{address.name}</p>
                                 <p>{address.contact}</p>
                                 <p>{address.addressLine1}</p>
                                 {address.addressLine2 && <p>{address.addressLine2}</p>}
-                                <p>{address.city}, {address.state}, {address.postalCode}</p>
+                                <p>
+                                    {address.city}, {address.state}, {address.postalCode}
+                                </p>
                                 <p>{address.country}</p>
                             </div>
                         ))}
-                        <div className="w-[100px] text-center p-2 bg-blue-500 text-white border rounded-md cursor-pointer">+</div>
+                        {/* You can add an "Add Address" button here */}
+                        <div className="w-[100px] text-center p-2 bg-blue-500 text-white border rounded-md cursor-pointer">
+                            +
+                        </div>
                     </div>
 
                     {/* Payment Mode */}
@@ -132,13 +143,19 @@ const Checkout = () => {
                         <div className="flex gap-4">
                             <button
                                 onClick={() => setPaymentMode(0)}
-                                className={`flex-1 py-3 text-center rounded-lg font-medium border ${paymentMode === 0 ? "bg-blue-500 text-white border-blue-500" : "bg-gray-50 text-gray-700 border-gray-300"}`}
+                                className={`flex-1 py-3 text-center rounded-lg font-medium border ${paymentMode === 0
+                                    ? "bg-blue-500 text-white border-blue-500"
+                                    : "bg-gray-50 text-gray-700 border-gray-300"
+                                    }`}
                             >
                                 Cash on Delivery (COD)
                             </button>
                             <button
                                 onClick={() => setPaymentMode(1)}
-                                className={`flex-1 py-3 text-center rounded-lg font-medium border ${paymentMode === 1 ? "bg-blue-500 text-white border-blue-500" : "bg-gray-50 text-gray-700 border-gray-300"}`}
+                                className={`flex-1 py-3 text-center rounded-lg font-medium border ${paymentMode === 1
+                                    ? "bg-blue-500 text-white border-blue-500"
+                                    : "bg-gray-50 text-gray-700 border-gray-300"
+                                    }`}
                             >
                                 Online Payment
                             </button>
@@ -156,11 +173,15 @@ const Checkout = () => {
                         </div>
                         <div className="flex justify-between mb-2">
                             <p>Discount:</p>
-                            <p className="text-green-600">{formatToIndianCurrency(cart.original_total - cart.final_total)}</p>
+                            <p className="text-green-600">
+                                {formatToIndianCurrency(cart.original_total - cart.final_total)}
+                            </p>
                         </div>
                         <div className="flex justify-between mb-4">
                             <p>Final Amount:</p>
-                            <p className="font-semibold text-lg">{formatToIndianCurrency(cart.final_total)}</p>
+                            <p className="font-semibold text-lg">
+                                {formatToIndianCurrency(cart.final_total)}
+                            </p>
                         </div>
                     </div>
 
